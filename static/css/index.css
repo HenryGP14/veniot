@@ -1,0 +1,134 @@
+* {
+    padding: 0;
+    margin: 0;
+    font-family: "Century Gothic";
+}
+
+.header {
+    background-color: #FFC16F;
+    width: 100%;
+}
+
+.header nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header nav .logo-container {
+    display: flex;
+    align-items: center;
+}
+
+.logo-container .logo {
+    overflow: hidden;
+    width: 40px;
+    height: 40px;
+}
+
+.logo-container .logo img {
+    width: 100%;
+}
+
+.logo-container span {
+    margin: 0 10px;
+}
+
+a {
+    text-decoration: none;
+    border: none;
+    color: #ffff !important;
+    display: inline-block;
+}
+
+p {
+    margin: 0 !important;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.header ul li {
+    float: left;
+}
+
+.btn {
+    padding: 10px;
+    transition: all 0.3s ease-in-out;
+    border: none;
+}
+
+.btn:hover {
+    opacity: 50%;
+    cursor: pointer;
+}
+
+.btn.active {
+    position: relative;
+}
+
+.btn.active::before {
+    content: "";
+    position: absolute;
+    background-color: #ffff;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+}
+
+.container {
+    width: 70%;
+    margin: 30px auto;
+}
+
+.container.grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.veniot {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.veniot svg {
+    width: 300px;
+}
+
+.veniot .piso {
+    background: cornflowerblue;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    transform: scale(2, 0.3);
+}
+
+.btn.btn-chat {
+    background-color: #FFC16F;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.card {
+    display: flex;
+    border: none;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.veniot #robot {
+    animation: veniot .5s ease infinite alternate;
+    animation-delay: .1s;
+}
+
+@keyframes veniot {
+    100% {
+        transform: translateY(-20px);
+    }
+}

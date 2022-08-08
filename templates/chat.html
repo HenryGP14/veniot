@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+<link href="{% static 'css/chat.css' %}" rel="stylesheet" type="text/css" />
+{% endblock css %}
+
+{% block content %}
+<div class="container">
+    <div class="mensajeria">
+        <div class="chat" id="chat">
+            <div id="portal" class="portal derecha">
+                <div class="profile">
+                    <img src="{% static 'svg/veniot.svg' %}">
+                </div>
+                <div class="content-msj">
+                    <p class="msj">
+                        Hola mi nombre es veniot soy un robot que le gusta aprender
+                    </p>
+                    <div class="direccion"></div>
+                </div>
+            </div>
+            <div id="portal" class="portal izquierda">
+                <div class="profile">
+                    <img src="{% static 'img/user.png' %}">
+                </div>
+                <div class="content-msj">
+                    <p class="msj">
+                        Hola mi nombre es veniot soy un robot que le gusta aprender
+                    </p>
+                    <div class="direccion"></div>
+                </div>
+            </div>
+            <div id="portal" class="portal derecha">
+                <div class="profile">
+                    <img src="{% static 'svg/veniot.svg' %}">
+                </div>
+                <div class="content-msj">
+                    <p class="msj">
+                        Hola mi nombre es veniot soy un robot que le gusta aprender
+                    </p>
+                    <div class="direccion"></div>
+                </div>
+            </div>
+            <div id="portal" class="portal izquierda">
+                <div class="profile">
+                    <img src="{% static 'img/user.png' %}">
+                </div>
+                <div class="content-msj">
+                    <p class="msj">
+                        Hola mi nombre es veniot soy un robot que le gusta aprender
+                    </p>
+                    <div class="direccion"></div>
+                </div>
+            </div>
+            <div id="portal" class="portal derecha">
+                <div class="profile">
+                    <img src="{% static 'svg/veniot.svg' %}">
+                </div>
+                <div class="content-msj">
+                    <p class="msj">
+                        Hola mi nombre es veniot soy un robot que le gusta aprender
+                    </p>
+                    <div class="direccion"></div>
+                </div>
+            </div>
+            <div id="portal" class="portal izquierda">
+                <div class="profile">
+                    <img src="{% static 'img/user.png' %}">
+                </div>
+                <div class="content-msj">
+                    <p class="msj">
+                        Hola mi nombre es veniot soy un robot que le gusta aprender
+                    </p>
+                    <div class="direccion"></div>
+                </div>
+            </div>
+            <div id="portal" class="portal derecha">
+                <div class="profile">
+                    <img src="{% static 'svg/veniot.svg' %}">
+                </div>
+                <div class="content-msj">
+                    <p class="msj">
+                        Hola mi nombre es veniot soy un robot que le gusta aprender
+                    </p>
+                    <div class="direccion"></div>
+                </div>
+            </div>
+            <div id="portal" class="portal izquierda">
+                <div class="profile">
+                    <img src="{% static 'img/user.png' %}">
+                </div>
+                <div class="content-msj">
+                    <p class="msj">
+                        Hola mi nombre es veniot soy un robot que le gusta aprender
+                    </p>
+                    <div class="direccion"></div>
+                </div>
+            </div>
+            <div id="portal" class="portal derecha">
+                <div class="profile">
+                    <img src="{% static 'svg/veniot.svg' %}">
+                </div>
+                <div class="content-msj">
+                    <p class="msj">
+                        Hola mi nombre es veniot soy un robot que le gusta aprender
+                    </p>
+                    <div class="direccion"></div>
+                </div>
+            </div>
+        </div>
+        <div class="receptor">
+            <input type="text" name="bandeja" id="bandeja">
+            <button class="btn grabar">
+                <i class="fa-solid fa-microphone" style="margin-right: 10px;"></i>
+                <span>Grabar</span>
+            </button>
+            <button class="btn enviar">
+                <i class="fa-solid fa-paper-plane" style="margin-right: 10px;"></i>
+                <span>Enviar</span>
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock content %}

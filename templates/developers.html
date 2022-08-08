@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+<link href="{% static 'css/developers.css' %}" rel="stylesheet" type="text/css" />
+{% endblock css %}
+
+{% block content %}
+<main>
+    <h2 class="fw-bolder text-center mt-4">Quienes somos</h2>
+    <div class="container marketing" style="margin-top: 50px;">
+        <!-- START THE FEATURETTES -->
+        <hr class="featurette-divider">
+        <div class="row featurette">
+            <div class="col-md-7">
+                <h2 class="featurette-heading fw-normal lh-1">Henry Pérez Muñoz</h2>
+                <p class="lead">Estudiante de la carrera Ingeniería en Software</p>
+                <ul>
+                    <li><strong>Carrera:</strong> Ingeniería en Software</li>
+                    <li><strong>Telefono:</strong> 0997823023</li>
+                    <li><strong>Correo:</strong> maria.mendez2016@uteq.edu.ec</li>
+                    <li><strong>Dirección:</strong> Quevedo</li>
+                </ul>
+            </div>
+            <div class="col-md-5">
+                <img src="{% static 'img\Henry.png' %}" alt="" width="400" height="400" class="d-inline-block rounded-5">
+            </div>
+        </div>
+
+        <hr class="featurette-divider">
+
+        <div class="row featurette">
+            <div class="col-md-7 order-md-2">
+                <h2 class="featurette-heading fw-normal lh-1">Valeria Torres Lindao</h2>
+                <p class="lead">Estudiante de la carrera Ingeniería en Sistemas</p>
+                <ul>
+                    <li><strong>Carrera:</strong> Ingeniería en Sistemas</li>
+                    <li><strong>Telefono:</strong> 0997823023</li>
+                    <li><strong>Correo:</strong> maria.mendez2016@uteq.edu.ec</li>
+                    <li><strong>Dirección:</strong> Quevedo</li>
+
+                </ul>
+            </div>
+            <div class="col-md-5 order-md-1">
+                <img src="{% static 'img\Valeria.jpg' %}" alt="" width="400" height="400" class="d-inline-block rounded-5">
+            </div>
+        </div>
+        <hr class="featurette-divider">
+        <div class="row featurette">
+            <div class="col-md-7">
+                <h2 class="featurette-heading fw-normal lh-1">María Méndez García</h2>
+                <p class="lead">Estudiante de la carrera Ingeniería en Sistemas</p>
+                <ul>
+                    <li><strong>Carrera:</strong> Ingeniería en Sistemas</li>
+                    <li><strong>Telefono:</strong> 0997823023</li>
+                    <li>Correo: maria.mendez2016@uteq.edu.ec</li>
+                    <li><strong>Dirección:</strong> Quevedo</li>
+                </ul>
+            </div>
+            <div class="col-md-5">
+                <img src="{% static 'img\Maria.jpg' %}" alt="" width="400" height="400" class="d-inline-block rounded-5">
+
+            </div>
+        </div>
+        <hr class="featurette-divider">
+    </div>
+</main>
+{% endblock content %}
