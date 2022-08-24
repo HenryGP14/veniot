@@ -1,6 +1,3 @@
-
-
-
 {% extends 'base.html' %}
 {% load static %}
 
@@ -15,9 +12,9 @@
 <script src="..\static\js\grabar.js" type="text/javascript"></script>
 
 
-    
+
 {% endblock js %}
-    
+
 
 {% block content %}
 
@@ -36,134 +33,112 @@
                     <div class="direccion"></div>
                 </div>
             </div>
-
-
-
-
         </div>
 
-        <p id="duracion"></p> 
-            <div data-role="recordings"></div>
+        <p id="duracion"></p>
+        <div data-role="recordings"></div>
         <div class="receptor">
+            {% csrf_token %}
             <input type="text" id="userBox" style=" width: 1250px;" placeholder="Escribe el mensaje">
             <button class="btn enviar" id="btnEnviar" onclick="talk()">
                 <i class="fa-solid fa-paper-plane" style="margin-right: 11px;"></i>
                 <span>Enviar</span>
             </button>
-            
-            <button class="btn grabar" id="btnComenzarGrabacion" style="visibility:hidden" >
-                <i class="fa-solid fa-microphone" style="margin-right: 10px;" ></i>
+            <button class="btn grabar" id="btnComenzarGrabacion" style="visibility:hidden">
+                <i class="fa-solid fa-microphone" style="margin-right: 10px;"></i>
                 <span>Grabar</span>
             </button>
-            <button class="btn enviar" id="btnDetenerGrabacion" style="visibility:hidden" >
+            <button class="btn enviar" id="btnDetenerGrabacion" style="visibility:hidden">
                 <i class="fa-solid fa-paper-plane" style="margin-right: 10px;"></i>
                 <span>Detener</span>
             </button>
-            
-
-            
-
-
-
         </div>
         <div>
-            
+
         </div>
     </div>
 </div>
 <script>
-function talk(){
-    var know ={
-        "Hola":"Por el momento solo se clonar voces, ¿Quieres probar?",
-        "Si":"Perfecto,  da click en el icono de grabar y lee el siguiente texto. Trabaja mientras otros duermen, Estudia mientras otros se divierten, Persiste mientras otros descansan y luego vivirás lo que otros solo sueñan. "
-        
-        
-    };
-    var user = document.getElementById('userBox').value;
-    talkUser(user);
-   
-    if(user in know){
-        
-        
+    function talk() {
+        var know = {
+            "Hola": "Por el momento solo se clonar voces, ¿Quieres probar?",
+            "Si": "Perfecto,  da click en el icono de grabar y lee el siguiente texto. Trabaja mientras otros duermen, Estudia mientras otros se divierten, Persiste mientras otros descansan y luego vivirás lo que otros solo sueñan. "
+        };
+        var user = document.getElementById('userBox').value;
+        talkUser(user);
 
-        var insertar = '<div id="portal" class="portal derecha">'+
-                            '<div class="profile">'+
-                                '<img src="{% static "svg/veniot.svg" %}">'+
-                            '</div>'+
-                            '<div class="content-msj">'+
-                                '<p class="msj">'+
-                                    know[user]+
-                                '</p>'+
-                                '<div class="direccion"></div>'+
-                           '</div>'+
-                       '</div>';
+        if (user in know) {
+            var insertar = '<div id="portal" class="portal derecha">' +
+                '<div class="profile">' +
+                '<img src="{% static "svg/veniot.svg" %}">' +
+                '</div>' +
+                '<div class="content-msj">' +
+                '<p class="msj">' +
+                know[user] +
+                '</p>' +
+                '<div class="direccion"></div>' +
+                '</div>' +
+                '</div>';
 
-                var btn = document.createElement("div");
-                btn.innerHTML = insertar;
-                document.getElementById("chat").appendChild(btn);
+            var btn = document.createElement("div");
+            btn.innerHTML = insertar;
+            document.getElementById("chat").appendChild(btn);
 
-                if(user=="Si"){
-                    document.getElementById('userBox').style.visibility = "hidden"; // hide
-                    document.getElementById('btnEnviar').style.visibility = "hidden"; // hide
-                    document.getElementById('btnComenzarGrabacion').style.visibility = "visible"; 
-                    document.getElementById('btnDetenerGrabacion').style.visibility = "visible";
+            if (user == "Si") {
+                document.getElementById('userBox').style.visibility = "hidden"; // hide
+                document.getElementById('btnEnviar').style.visibility = "hidden"; // hide
+                document.getElementById('btnComenzarGrabacion').style.visibility = "visible";
+                document.getElementById('btnDetenerGrabacion').style.visibility = "visible";
 
-                }
+            }
 
 
-    }else{
-        var insertar = '<div id="portal" class="portal derecha">'+
-                            '<div class="profile">'+
-                                '<img src="{% static "svg/veniot.svg" %}">'+
-                            '</div>'+
-                            '<div class="content-msj">'+
-                                '<p class="msj">'+
-                                   "No entiendo lo que quieres decir"+
-                                '</p>'+
-                                '<div class="direccion"></div>'+
-                           '</div>'+
-                       '</div>';
+        } else {
+            var insertar = '<div id="portal" class="portal derecha">' +
+                '<div class="profile">' +
+                '<img src="{% static "svg/veniot.svg" %}">' +
+                '</div>' +
+                '<div class="content-msj">' +
+                '<p class="msj">' +
+                "No entiendo lo que quieres decir" +
+                '</p>' +
+                '<div class="direccion"></div>' +
+                '</div>' +
+                '</div>';
 
-                var btn = document.createElement("div");
-                btn.innerHTML = insertar;
-                document.getElementById("chat").appendChild(btn);
+            var btn = document.createElement("div");
+            btn.innerHTML = insertar;
+            document.getElementById("chat").appendChild(btn);
+        }
     }
-}
 
-function talkUser( mensaje)
-{
+    function talkUser(mensaje) {
 
 
-    var insertar = '<div id="portal" class="portal izquierda">'+
-                            '<div class="profile">'+
-                                '<img src="{% static "img/user.png" %}">'+
-                            '</div>'+
-                            '<div class="content-msj">'+
-                                '<p class="msj">'+
-                                    mensaje+
-                                '</p>'+
-                                '<div class="direccion"></div>'+
-                           '</div>'+
-                       '</div>';
+        var insertar = '<div id="portal" class="portal izquierda">' +
+            '<div class="profile">' +
+            '<img src="{% static "img/user.png" %}">' +
+            '</div>' +
+            '<div class="content-msj">' +
+            '<p class="msj">' +
+            mensaje +
+            '</p>' +
+            '<div class="direccion"></div>' +
+            '</div>' +
+            '</div>';
 
-                var btn = document.createElement("div");
-                btn.innerHTML = insertar;
-                document.getElementById("chat").appendChild(btn);
+        var btn = document.createElement("div");
+        btn.innerHTML = insertar;
+        document.getElementById("chat").appendChild(btn);
 
-}
+    }
 
 
 
 
-/* 
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/JavaScript.js to edit this template
- */
- 
-
-
-
-
-
+    /* 
+     * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+     * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/JavaScript.js to edit this template
+     */
 </script>
 {% endblock content %}

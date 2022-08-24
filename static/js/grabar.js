@@ -2,11 +2,26 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/JavaScript.js to edit this template
  */
+// Función para establecer una cookie, que será necesario para las solicitudes Ajax con Django
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
 jQuery(document).ready(function () {
     var $ = jQuery;
-    const  $duracion = document.querySelector("#duracion");
-    const  $btnComenzarGrabacion = document.querySelector("#btnComenzarGrabacion"),
-            $btnDetenerGrabacion = document.querySelector("#btnDetenerGrabacion");
+    const $duracion = document.querySelector("#duracion");
+    const $btnComenzarGrabacion = document.querySelector("#btnComenzarGrabacion"),
+        $btnDetenerGrabacion = document.querySelector("#btnDetenerGrabacion");
     const segundosATiempo = numeroDeSegundos => {
         let horas = Math.floor(numeroDeSegundos / 60 / 60);
         numeroDeSegundos -= horas * 60 * 60;
@@ -49,9 +64,9 @@ jQuery(document).ready(function () {
         },
         init: function () {
             if (null === myRecorder.objects.context) {
-                myRecorder.objects.context = new (
-                        window.AudioContext || window.webkitAudioContext
-                        );
+                myRecorder.objects.context = new(
+                    window.AudioContext || window.webkitAudioContext
+                );
             }
         },
         start: function () {
@@ -63,9 +78,9 @@ jQuery(document).ready(function () {
                 myRecorder.objects.stream = stream;
                 comenzarAContar();
                 myRecorder.objects.recorder = new Recorder(
-                        myRecorder.objects.context.createMediaStreamSource(stream), {
-                    numChannels: 1
-                }
+                    myRecorder.objects.context.createMediaStreamSource(stream), {
+                        numChannels: 1
+                    }
                 );
                 myRecorder.objects.recorder.record();
             }).catch(function (err) {});
@@ -79,37 +94,39 @@ jQuery(document).ready(function () {
                 detenerConteo();
                 // Validate object
                 if (null !== listObject &&
-                        'object' === typeof listObject &&
-                        listObject.length > 0) {
+                    'object' === typeof listObject &&
+                    listObject.length > 0) {
                     // Export the WAV file
                     myRecorder.objects.recorder.exportWAV(function (blob) {
                         var url = (window.URL || window.webkitURL)
-                                .createObjectURL(blob);
+                            .createObjectURL(blob);
                         // Prepare the playback
                         var audioObject = $('<audio controls></audio>')
-                                .attr('src', url);
+                            .attr('src', url);
                         // Prepare the download link
                         var downloadObject = $('<a>&#9660;</a>')
-                                .attr('href', url)
-                                .attr('download', new Date().toUTCString() + '.wav');
+                            .attr('href', url)
+                            .attr('download', new Date().toUTCString() + '.wav');
                         // Wrap everything in a row
                         var holderObject = $('<div class="row"></div>')
-                                .append(audioObject)
-                                .append(downloadObject);
+                            .append(audioObject)
+                            .append(downloadObject);
                         // Append to the list
                         listObject.append(holderObject);
                         var frmData = new FormData();
+                        var csrftoken = getCookie('csrftoken');
                         frmData.append('audio', blob);
                         frmData.append('host', window.location.protocol + '//' + window.location.host);
+                        frmData.append('csrfmiddlewaretoken', csrftoken)
                         $.ajax({
                             method: "POST",
-                            url: "AudioSrv",
+                            url: "http://127.0.0.1:8000/clonar/",
                             data: frmData,
+                            dataType: 'json',
                             processData: false,
                             contentType: false,
                             success: function (data) {
-                               
-                              console.log(frmData);
+                                console.log(frmData);
                                 console.log("Archivo guardado con exito");
                             },
                             error: function (error) {
@@ -124,23 +141,23 @@ jQuery(document).ready(function () {
     // Prepare the recordings list
     var listObject = $('[data-role="recordings"]');
     // Prepare the record button
-//        $('[data-role="controls"] > button').click(function () {
-//            
-//    console.log('estoy');
-// Initialize the recorder
-//myRecorder.init();
-// // Get the button state 
-//        var buttonState = !!$(this).attr('data-recording');
-//
-//        // Toggle
-//        if (!buttonState) {
-//            $(this).attr('data-recording', 'true');
-//            myRecorder.start();
-//        } else {
-//            $(this).attr('data-recording', '');
-//            myRecorder.stop(listObject);
-//        }
-//    });
+    //        $('[data-role="controls"] > button').click(function () {
+    //            
+    //    console.log('estoy');
+    // Initialize the recorder
+    //myRecorder.init();
+    // // Get the button state 
+    //        var buttonState = !!$(this).attr('data-recording');
+    //
+    //        // Toggle
+    //        if (!buttonState) {
+    //            $(this).attr('data-recording', 'true');
+    //            myRecorder.start();
+    //        } else {
+    //            $(this).attr('data-recording', '');
+    //            myRecorder.stop(listObject);
+    //        }
+    //    });
 
     const comenzarAGrabar = () => {
         myRecorder.init();
@@ -155,6 +172,6 @@ jQuery(document).ready(function () {
     };
     $btnComenzarGrabacion.addEventListener("click", comenzarAGrabar);
     $btnDetenerGrabacion.addEventListener("click", detenerGrabacion);
-//        
-//});
+    //        
+    //});
 });

@@ -10,6 +10,7 @@ from entrenamiento.vocoder import inference as vocoder
 from pathlib import Path
 from django.shortcuts import render
 from django.http import HttpResponse
+from entrenamiento.models import Media
 
 # Create your views here.
 def clonar(request):
@@ -44,12 +45,15 @@ def clonar(request):
     try:
         # Guardar el audio que es enviado por ajax
         ## Código
+        audio_media = Media.objects.create(
+            nombre="audio_p", ruta=request.FILES["audio"]
+        )
 
         # Obtener la ruta de audio
         ## Código
 
         # Conseguir la ruta de audio
-        audio_path = "./media/sound/audio_test.mp3"
+        audio_path = "./media/sounds/audio_test.mp3"
 
         ## Calculando la incrustación
         # Primero, cargamos el wav usando la función que proporciona el codificador del altavoz. Esto es
@@ -107,7 +111,7 @@ def clonar(request):
         generated_wav = encoder.preprocess_wav(generated_wav)
 
         # Guardar audio
-        route_save = "./media/audio/"
+        route_save = "./media/audios/"
         filename = "%sdemo_output.wav" % route_save
         print(generated_wav.dtype)
         sf.write(filename, generated_wav.astype(np.float32), synthesizer.sample_rate)
