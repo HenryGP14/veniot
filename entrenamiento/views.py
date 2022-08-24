@@ -1,123 +1,46 @@
-from utils.argutils import print_args
-from utils.modelutils import check_model_paths
-from synthesizer.inference import Synthesizer
-from encoder import inference as encoder
-from vocoder import inference as vocoder
-from pathlib import Path
 import numpy as np
 import soundfile as sf
 import librosa
-import argparse
 import torch
-import os
-from audioread.exceptions import NoBackendError
 
-## Preparar las configuraciones del clonador de voz
-if __name__ == "__main__":
-    ## Info & args
-    parser = argparse.ArgumentParser(
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter
-    )
-    parser.add_argument(
-        "-e",
-        "--enc_model_fpath",
-        type=Path,
-        default="encoder/saved_models/pretrained.pt",
-        help="Path to a saved encoder",
-    )
-    parser.add_argument(
-        "-s",
-        "--syn_model_fpath",
-        type=Path,
-        default="synthesizer/saved_models/cvcorpus/cvcorpus_200k.pt",
-        help="Path to a saved synthesizer",
-    )
-    parser.add_argument(
-        "-v",
-        "--voc_model_fpath",
-        type=Path,
-        default="vocoder/saved_models/pretrained/pretrained.pt",
-        help="Path to a saved vocoder",
-    )
-    parser.add_argument(
-        "--cpu",
-        action="store_true",
-        help="If True, processing is done on CPU, even when a GPU is available.",
-    )
-    parser.add_argument(
-        "--no_sound", action="store_true", help="If True, audio won't be played."
-    )
-    parser.add_argument(
-        "--seed",
-        type=int,
-        default=None,
-        help="Optional random number seed value to make toolbox deterministic.",
-    )
-    parser.add_argument(
-        "--no_mp3_support",
-        action="store_true",
-        help="If True, disallows loading mp3 files to prevent audioread errors when ffmpeg is not installed.",
-    )
-    args = parser.parse_args()
-    print_args(args, parser)
-    if not args.no_sound:
-        import sounddevice as sd
-
-    if args.cpu:
-        # Oculte las GPU de Pytorch para forzar el procesamiento de la CPU
-        os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
-
-    # Revisa si el servidor se encuentra instalado el convertidor de mp3 esta instalado
-    if not args.no_mp3_support:
-        try:
-            librosa.load("../media/sound/audio_test.mp3")
-        except NoBackendError:
-            print(
-                "Librosa will be unable to open mp3 files if additional software is not installed.\n"
-                "Please install ffmpeg or add the '--no_mp3_support' option to proceed without support for mp3 files."
-            )
-            exit(-1)
-
-    print("Running a test of your configuration...\n")
-
-    if torch.cuda.is_available():
-        device_id = torch.cuda.current_device()
-        gpu_properties = torch.cuda.get_device_properties(device_id)
-        ## Imprime alguna información del entorno (para fines de depuración)
-        print(
-            "Found %d GPUs available. Using GPU %d (%s) of compute capability %d.%d with "
-            "%.1fGb total memory.\n"
-            % (
-                torch.cuda.device_count(),
-                device_id,
-                gpu_properties.name,
-                gpu_properties.major,
-                gpu_properties.minor,
-                gpu_properties.total_memory / 1e9,
-            )
-        )
-    else:
-        print("Using CPU for inference.\n")
-
+from entrenamiento.utils.modelutils import check_model_paths
+from entrenamiento.synthesizer.inference import Synthesizer
+from entrenamiento.encoder import inference as encoder
+from entrenamiento.vocoder import inference as vocoder
+from pathlib import Path
+from django.shortcuts import render
+from django.http import HttpResponse
 
 # Create your views here.
-def clonacion(request):
-    ## Cheequea si los modelos están descargados
+def clonar(request):
+    enc_model_fpath = Path("entrenamiento/encoder/saved_models/pretrained.pt")
+    syn_model_fpath = Path(
+        "entrenamiento/synthesizer/saved_models/cvcorpus/cvcorpus_200k.pt"
+    )
+    voc_model_fpath = Path(
+        "entrenamiento/vocoder/saved_models/pretrained/pretrained.pt"
+    )
+    # Cheequea si los modelos están descargados
     check_model = check_model_paths(
-        encoder_path=args.enc_model_fpath,
-        synthesizer_path=args.syn_model_fpath,
-        vocoder_path=args.voc_model_fpath,
+        encoder_path=enc_model_fpath,
+        synthesizer_path=syn_model_fpath,
+        vocoder_path=voc_model_fpath,
     )
 
     ## Si no están completos los modelos la web indicará al usuario el error -14
     if not check_model:
-        return "Lo sentimos el servidor de clonación de voz se encuentra fuera de servicio, contacte algunos de los desarrolladores e indique error -14"
+        print(
+            "Lo sentimos el servidor de clonación de voz se encuentra fuera de servicio, contacte algunos de los desarrolladores e indique error -14"
+        )
+        return HttpResponse(
+            "Lo sentimos el servidor de clonación de voz se encuentra fuera de servicio, contacte algunos de los desarrolladores e indique error -14"
+        )
 
     ## Cargue los modelos uno por uno.
     print("Preparing the encoder, the synthesizer and the vocoder...")
-    encoder.load_model(args.enc_model_fpath)
-    synthesizer = Synthesizer(args.syn_model_fpath)
-    vocoder.load_model(args.voc_model_fpath)
+    encoder.load_model(enc_model_fpath)
+    synthesizer = Synthesizer(syn_model_fpath)
+    vocoder.load_model(voc_model_fpath)
     try:
         # Guardar el audio que es enviado por ajax
         ## Código
@@ -126,7 +49,7 @@ def clonacion(request):
         ## Código
 
         # Conseguir la ruta de audio
-        audio_path = "../media/sound/audio_test.mp3"
+        audio_path = "./media/sound/audio_test.mp3"
 
         ## Calculando la incrustación
         # Primero, cargamos el wav usando la función que proporciona el codificador del altavoz. Esto es
@@ -149,9 +72,10 @@ def clonacion(request):
         text = "Esto es una prueba de clonación de voz"
 
         # Si se especifica la semilla, reinicie la semilla de la antorcha y fuerce la recarga del sintetizador
-        if args.seed is not None:
-            torch.manual_seed(args.seed)
-            synthesizer = Synthesizer(args.syn_model_fpath)
+        seed = None
+        if seed is not None:
+            torch.manual_seed(seed)
+            synthesizer = Synthesizer(syn_model_fpath)
 
         # El sintetizador funciona por lotes, por lo que debe colocar sus datos en una lista o matriz numérica
         texts = [text]
@@ -164,9 +88,9 @@ def clonacion(request):
         print("Created the mel spectrogram")
 
         # Si se especifica la semilla, reinicie la semilla de la antorcha y vuelva a cargar el vocoder
-        if args.seed is not None:
-            torch.manual_seed(args.seed)
-            vocoder.load_model(args.voc_model_fpath)
+        if seed is not None:
+            torch.manual_seed(seed)
+            vocoder.load_model(voc_model_fpath)
 
         # Sintetizar la forma de onda es bastante sencillo. Recuerda que cuanto más tiempo
         # espectrograma, más eficiente en el tiempo es el vocoder.
@@ -183,12 +107,18 @@ def clonacion(request):
         generated_wav = encoder.preprocess_wav(generated_wav)
 
         # Guardar audio
-        route_save = "../media/audio/"
+        route_save = "./media/audio/"
         filename = "%sdemo_output.wav" % route_save
         print(generated_wav.dtype)
         sf.write(filename, generated_wav.astype(np.float32), synthesizer.sample_rate)
 
-        return "Clonación terminada"
-    except:
+        return HttpResponse("Clonación terminada")
+    except Exception as e:
+        # El error -45 aparece cuando algunos de los modelos no esta bien descargados y se encuentran vacios
+        print(
+            "Lo sentimos el servidor de clonación de voz se encuentra fuera de servicio, contacte algunos de los desarrolladores e indique error -45"
+        )
         # Aquí sucede un error
-        pass
+        return HttpResponse(
+            "Lo sentimos el servidor de clonación de voz se encuentra fuera de servicio, contacte algunos de los desarrolladores e indique error -45"
+        )
