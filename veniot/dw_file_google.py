@@ -40,7 +40,7 @@ def bajar_archivo_por_id(id_drive, ruta_descarga):
     if not os.path.isfile(ruta_descarga + nombre_archivo):
         archivo.GetContentFile(ruta_descarga + nombre_archivo)
     else:
-        print("El archivo ya se encuentra descargado")
+        print("El archivo ya se encuentra descargado = %s_%s", ruta_descarga, nombre_archivo) 
 
 
 # DESCARGAR UN ARCHIVO DE DRIVE POR NOMBRE

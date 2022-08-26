@@ -45,10 +45,13 @@ def clonar(request):
     try:
         # Guardar el audio que es enviado por ajax
         ## Código
-        audio_media = Media.objects.create(
-            nombre="audio_p", ruta=request.FILES["audio"]
-        )
+        try:
 
+            audio_media = Media.objects.create(
+                nombre="audio_p", ruta=request.FILES["audio"]
+            )
+        except: 
+            pass
         # Obtener la ruta de audio
         ## Código
 
@@ -122,6 +125,8 @@ def clonar(request):
         print(
             "Lo sentimos el servidor de clonación de voz se encuentra fuera de servicio, contacte algunos de los desarrolladores e indique error -45"
         )
+        
+        print(e)
         # Aquí sucede un error
         return HttpResponse(
             "Lo sentimos el servidor de clonación de voz se encuentra fuera de servicio, contacte algunos de los desarrolladores e indique error -45"
