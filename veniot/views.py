@@ -1,4 +1,7 @@
+from operator import truediv
 from django.shortcuts import render
+
+from entrenamiento.models import Media
 
 
 def index(request):

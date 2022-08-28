@@ -1,3 +1,4 @@
+import re
 import numpy as np
 import soundfile as sf
 import librosa
@@ -36,7 +37,8 @@ def clonar(request):
             )
             return JsonResponse(
                 {
-                    "mensaje": "Lo sentimos el servidor de clonación de voz se encuentra fuera de servicio, contacte algunos de los desarrolladores e indique error -14"
+                    "code": 0,
+                    "message": "Lo sentimos el servidor de clonación de voz se encuentra fuera de servicio, contacte algunos de los desarrolladores e indique error -14",
                 }
             )
 
@@ -54,7 +56,9 @@ def clonar(request):
                 )
                 audio_path = "." + audio_media.ruta.url
                 text = request.POST["texto"]
-                nombre_usuario = request.POST["user"]
+                nombre_usuario = audio_media.ruta.name.replace("sounds/", "").replace(
+                    ".wav", ""
+                )
             except:
                 audio_path = "./media/sounds/audio_test.mp3"
                 text = "Soy una voz predeterminada"
@@ -130,19 +134,26 @@ def clonar(request):
                 synthesizer.sample_rate,
             )
 
-            return JsonResponse({"mensaje": 0})
+            return JsonResponse(
+                {
+                    "code": 1,
+                    "message": "Tu voz a sido clonada, revisa y escuala",
+                    "url": "/" + audio_media.ruta_audio_clonado,
+                }
+            )
         except Exception as e:
             # El error -45 aparece cuando algunos de los modelos no esta bien descargados y se encuentran vacios
             print(
                 "Lo sentimos el servidor de clonación de voz se encuentra fuera de servicio, contacte algunos de los desarrolladores e indique error -45"
             )
-
-            print(e)
             # Aquí sucede un error
             return JsonResponse(
                 {
-                    "mensaje": "Lo sentimos el servidor de clonación de voz se encuentra fuera de servicio, contacte algunos de los desarrolladores e indique error -45"
+                    "code": 0,
+                    "message": "Lo sentimos el servidor de clonación de voz se encuentra fuera de servicio, contacte algunos de los desarrolladores e indique error -45",
                 }
             )
     else:
-        return JsonResponse({"mensaje": 0})
+        return JsonResponse(
+            {"code": 0, "message": "Lo sentimos estás tratando de acceder ilegalmente"}
+        )
