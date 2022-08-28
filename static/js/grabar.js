@@ -2,7 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/JavaScript.js to edit this template
  */
+
+
 // Función para establecer una cookie, que será necesario para las solicitudes Ajax con Django
+var blob;
+
 function getCookie(name) {
     var cookieValue = null;
     if (document.cookie && document.cookie != '') {
@@ -18,10 +22,13 @@ function getCookie(name) {
     return cookieValue;
 }
 jQuery(document).ready(function () {
+
     var $ = jQuery;
     const $duracion = document.querySelector("#duracion");
     const $btnComenzarGrabacion = document.querySelector("#btnComenzarGrabacion"),
-        $btnDetenerGrabacion = document.querySelector("#btnDetenerGrabacion");
+        $btnDetenerGrabacion = document.querySelector("#btnDetenerGrabacion"),
+        $btnEnviarAjax = document.querySelector("#btnEnviarTexto");
+
     const segundosATiempo = numeroDeSegundos => {
         let horas = Math.floor(numeroDeSegundos / 60 / 60);
         numeroDeSegundos -= horas * 60 * 60;
@@ -97,9 +104,10 @@ jQuery(document).ready(function () {
                     'object' === typeof listObject &&
                     listObject.length > 0) {
                     // Export the WAV file
-                    myRecorder.objects.recorder.exportWAV(function (blob) {
+                    myRecorder.objects.recorder.exportWAV(function (data) {
                         var url = (window.URL || window.webkitURL)
-                            .createObjectURL(blob);
+                            .createObjectURL(data);
+                        blob = data;
                         // Prepare the playback
                         var audioObject = $('<audio controls></audio>')
                             .attr('src', url);
@@ -113,26 +121,30 @@ jQuery(document).ready(function () {
                             .append(downloadObject);
                         // Append to the list
                         listObject.append(holderObject);
-                        var frmData = new FormData();
-                        var csrftoken = getCookie('csrftoken');
-                        frmData.append('audio', blob);
-                        frmData.append('host', window.location.protocol + '//' + window.location.host);
-                        frmData.append('csrfmiddlewaretoken', csrftoken)
-                        $.ajax({
-                            method: "POST",
-                            url: "http://127.0.0.1:8000/clonar/",
-                            data: frmData,
-                            dataType: 'json',
-                            processData: false,
-                            contentType: false,
-                            success: function (data) {
-                                console.log(frmData);
-                                console.log("Archivo guardado con exito");
-                            },
-                            error: function (error) {
-                                console.log("Algo salio mal al guardar el archivo");
-                            }
-                        });
+                        const enviar = document.querySelector("#btnEnviar2");
+                        document.getElementById('userBox').style.visibility = "visible"; // hide
+                        document.getElementById('btnComenzarGrabacion').style.visibility = "hidden";
+                        document.getElementById('btnDetenerGrabacion').style.visibility = "hidden";
+                        document.getElementById("btnEnviar3").style.visibility = "hidden";
+                        document.getElementById("btnEnviarTexto").style.visibility = "visible";
+
+                        var hola = "Ingresa el texto que quieres que se reproduzca con tu voz";
+                        document.getElementById('userBox').value = "";
+                        var insertar = '<div id="portal" class="portal derecho">' +
+                            '<div class="profile">' +
+                            '<img src="{% static "svg/veniot.svg" %}">' +
+                            '</div>' +
+                            '<div class="content-msj">' +
+                            '<p class="msj">' +
+                            hola +
+                            '</p>' +
+                            '<div class="direccion"></div>' +
+                            '</div>' +
+                            '</div>';
+                        console.log(insertar);
+                        var btn = document.createElement("div");
+                        btn.innerHTML = insertar;
+                        document.getElementById("chat").appendChild(btn);
                     });
                 }
             }
@@ -161,6 +173,10 @@ jQuery(document).ready(function () {
 
     const comenzarAGrabar = () => {
         myRecorder.init();
+
+        const detener = document.querySelector("#btnDetenerGrabacion");
+        detener.disabled = false;
+        console.log(detener);
         myRecorder.start();
 
         console.log('inicio y empiezo');
@@ -170,6 +186,34 @@ jQuery(document).ready(function () {
 
         console.log('detener');
     };
+    const EnviarAjax = () => {
+        document.getElementById("userBox").value = "";
+        var frmData = new FormData();
+        var csrftoken = getCookie('csrftoken');
+        audio_dile = new File([blob], window.val + ".wav");
+        frmData.append('audio', audio_dile);
+        frmData.append('host', window.location.protocol + '//' + window.location.host);
+        frmData.append('user', window.val);
+        frmData.append('texto', window.texto);
+        frmData.append('csrfmiddlewaretoken', csrftoken);
+        console.log(frmData.get('user'));
+        console.log(frmData.get('host'));
+        $.ajax({
+            method: "POST",
+            url: "http://127.0.0.1:8000/clonar/",
+            data: frmData,
+            dataType: 'json',
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                console.log(data['mensaje']);
+            },
+            error: function (error) {
+                console.log("Algo salio mal al guardar el archivo");
+            }
+        });
+    };
+    $btnEnviarAjax.addEventListener("click", EnviarAjax);
     $btnComenzarGrabacion.addEventListener("click", comenzarAGrabar);
     $btnDetenerGrabacion.addEventListener("click", detenerGrabacion);
     //        

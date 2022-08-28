@@ -7,3 +7,4 @@ class Media(models.Model):
     nombre = models.TextField()
     ruta = models.FileField(upload_to="sounds/")
     fecha = models.DateTimeField(auto_now=True)
+    ruta_audio_clonado = models.TextField(null=True, blank=True)
