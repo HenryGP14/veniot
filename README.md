@@ -29,6 +29,14 @@ Si al intentar iniciar sesión le sale acceso denegado, procure crear nuevas cre
 
 La idea de la creación de veniot (**V**oic**e** Clo**ni**ng Rob**ot**) surgió en la demanda del mercado de la clonación de voz es cada vez mayor, debido a sus interesantes y variadas aplicaciones que se puede ofrecer, entre las que se encuentran los asistentes conversacionales, los altavoces inteligentes, el doblaje, los personajes digitales, los juegos, los audiolibros, los sistemas de navegación o el branding de voz.
 
+## **Ejecución de la aplicación web**
+
+Para ejecutar la aplicación web se necesita abrir una terminal de su preferencia en la ruta de la aplicación y ejecutar el siguiente comando o línea de código:
+
+    python manage.py runserver
+
+**Nota:** Para que la aplicación web funcione correctamente, revisar los procedimientos anteriores
+
 ## **Código original**
 
 [**Real-Time Voice Cloning**](https://github.com/CorentinJ/Real-Time-Voice-Cloning) by CorentinJ
