@@ -1,3 +1,4 @@
+from operator import truediv
 import os
 from django.db import models
 
@@ -6,7 +7,7 @@ from entrenamiento.encoder import model
 # Create your models here.
 class Media(models.Model):
     nombre = models.TextField()
-    ruta = models.FileField(upload_to="sounds/")
+    ruta = models.FileField(upload_to="sounds/", null=True, blank=False)
     fecha = models.DateTimeField(auto_now=True)
     ruta_audio_clonado = models.TextField(null=True, blank=True)
 

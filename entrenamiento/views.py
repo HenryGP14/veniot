@@ -1,4 +1,4 @@
-import re
+import unicodedata
 import numpy as np
 import soundfile as sf
 import librosa
@@ -9,7 +9,6 @@ from entrenamiento.synthesizer.inference import Synthesizer
 from entrenamiento.encoder import inference as encoder
 from entrenamiento.vocoder import inference as vocoder
 from pathlib import Path
-from django.shortcuts import render
 from django.http import JsonResponse
 from entrenamiento.models import Media
 
@@ -17,12 +16,8 @@ from entrenamiento.models import Media
 def clonar(request):
     if request.method == "POST":
         enc_model_fpath = Path("entrenamiento/encoder/saved_models/pretrained.pt")
-        syn_model_fpath = Path(
-            "entrenamiento/synthesizer/saved_models/cvcorpus/cvcorpus_200k.pt"
-        )
-        voc_model_fpath = Path(
-            "entrenamiento/vocoder/saved_models/pretrained/pretrained.pt"
-        )
+        syn_model_fpath = Path("entrenamiento/synthesizer/saved_models/cvcorpus/cvcorpus_200k.pt")
+        voc_model_fpath = Path("entrenamiento/vocoder/saved_models/pretrained/pretrained.pt")
         # Cheequea si los modelos están descargados
         check_model = check_model_paths(
             encoder_path=enc_model_fpath,
@@ -51,18 +46,22 @@ def clonar(request):
             # Guardar el audio que es enviado por ajax
             ## Código
             try:
-                audio_media = Media.objects.create(
-                    nombre=request.POST["user"], ruta=request.FILES["audio"]
-                )
-                audio_path = "." + audio_media.ruta.url
-                text = request.POST["texto"]
-                nombre_usuario = audio_media.ruta.name.replace("sounds/", "").replace(
-                    ".wav", ""
-                )
+                if request.FILES["audio"] != None:
+                    audio_media = Media.objects.create(
+                        nombre=request.POST["user"], ruta=request.FILES["audio"]
+                    )
+                    audio_path = "." + audio_media.ruta.url
+                    text = request.POST["texto"]
+                    nombre_usuario = audio_media.ruta.name.replace("sounds/", "").replace(
+                        ".wav", ""
+                    )
             except:
+                audio_media = Media()
+                audio_media.nombre = request.POST["user"]
+                audio_media.save()
                 audio_path = "./media/sounds/audio_test.mp3"
-                text = "Soy una voz predeterminada"
-                nombre_usuario = "Ejemplo"
+                text = request.POST["texto"]
+                nombre_usuario = "Ejemplo" + str(audio_media.id)
             # Obtener la ruta de audio
             ## Código
 
@@ -113,9 +112,7 @@ def clonar(request):
             ## Post-generación
             # Hay un error con el dispositivo de sonido que hace que el audio se corte un segundo antes, así que
             # rellenarlo.
-            generated_wav = np.pad(
-                generated_wav, (0, synthesizer.sample_rate), mode="constant"
-            )
+            generated_wav = np.pad(generated_wav, (0, synthesizer.sample_rate), mode="constant")
 
             # Recorte el exceso de silencios para compensar las lagunas en los espectrogramas (problema #53)
             generated_wav = encoder.preprocess_wav(generated_wav)

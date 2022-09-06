@@ -6,7 +6,18 @@
     max-height: calc(100vh - 220px);
 }
 
+.audio-controler {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+.audio-controler audio {
+    width: 100%;
+}
+
 .mensajeria .chat .portal {
+    margin-top: 10px;
     display: flex;
     align-items: center;
 }
@@ -96,4 +107,14 @@
     display: flex;
     align-items: center;
     margin: 0 5px;
+}
+
+@media (max-width: 850px) {
+    .mensajeria .chat {
+        padding: 0;
+    }
+
+    .toast-top-right {
+        top: 12px !important;
+    }
 }

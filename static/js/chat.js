@@ -1,4 +1,5 @@
 var opciones = 0;
+var mensaje = "con tu propia voz"
 const $duracion = document.querySelector("#duracion");
 var user_name, data_text;
 
@@ -43,7 +44,7 @@ function talk() {
             $("#btnEnviar").show();
             $("#btnComenzarGrabacion").hide();
             $("#btnDetenerGrabacion").hide();
-            talk_robot("¡Perfecto!, ahora escribe lo que te gustaría escuchar con tu propia voz.");
+            talk_robot(`¡Perfecto!, ahora escribe lo que te gustaría escuchar ${ mensaje }`);
             $("#userBox").show();
             $("#btnEnviar span").html("Enviar a clonar");
             $("#btnEnviar").css('width', '200px ');
@@ -66,7 +67,7 @@ function talk() {
 
 function talk_robot(mensaje) {
     var html_content = `
-    <div class="portal derecha mt-1">
+    <div class="portal derecha">
         <div class="profile">
             <img src="/static/svg/veniot.svg">
         </div>
@@ -80,6 +81,7 @@ function talk_robot(mensaje) {
     `;
     $("#chat").append(html_content);
     $('#chat').scrollTop($('#chat').prop('scrollHeight'));
+    $('html').scrollTop($('html').prop('scrollHeight'));
 }
 
 function talk_user(mensaje) {
@@ -98,6 +100,7 @@ function talk_user(mensaje) {
     `;
     $("#chat").append(html_content);
     $('#chat').scrollTop($('#chat').prop('scrollHeight'));
+    $('html').scrollTop($('html').prop('scrollHeight'));
 }
 
 // Función para establecer una cookie, que será necesario para las solicitudes Ajax con Django
@@ -144,7 +147,6 @@ const comenzarAContar = () => {
 };
 
 const detenerConteo = () => {
-
     clearInterval(idIntervalo);
     tiempoInicio = null;
     $duracion.textContent = "";
@@ -169,6 +171,7 @@ var myRecorder = {
             audio: true,
             video: false
         };
+
         navigator.mediaDevices.getUserMedia(options).then(function (stream) {
             myRecorder.objects.stream = stream;
             comenzarAContar();
@@ -178,7 +181,15 @@ var myRecorder = {
                 }
             );
             myRecorder.objects.recorder.record();
-        }).catch(function (err) {});
+        }).catch(function (err) {
+            swal("Información!!", "Lo sentimos no pudimos tener acceso a tu micrófono puedes concederlo manualmente si quieres interactuar con Veniot o puedes interactuar con mi voz predeterminada.", "warning").then((value) => {
+                talk_robot("Esta es mi voz predeterminada");
+                $("#chat").append($('<div class="audio-controler"></div>').append($('<audio controls></audio>').attr('src', '/media/sounds/audio_test2.wav')));
+                mensaje = "con mi voz predeterminada";
+                opciones += 1;
+                talk();
+            });;
+        });
     },
     stop: function (listObject) {
         if (null !== myRecorder.objects.stream) {
@@ -204,7 +215,7 @@ var myRecorder = {
                         .attr('href', url)
                         .attr('download', new Date().toUTCString() + '.wav');
                     // Wrap everything in a row
-                    var holderObject = $('<div class="row"></div>')
+                    var holderObject = $('<div class="audio-controler"></div>')
                         .append(audioObject)
                     // Append to the list
                     $("#chat").append(holderObject);
@@ -223,12 +234,9 @@ const comenzarAGrabar = () => {
     $("#btnDetenerGrabacion").prop("disabled", false);
     myRecorder.init();
     myRecorder.start();
-
-    console.log('inicio y empiezo');
 };
 const detenerGrabacion = () => {
     myRecorder.stop(listObject);
-    console.log('detener');
 };
 
 const EnviarAjax = () => {
@@ -241,8 +249,16 @@ const EnviarAjax = () => {
         $(".portal").css('position', 'relative').last().append(spinner);
         var frmData = new FormData();
         var csrftoken = getCookie('csrftoken');
-        audio_file = new File([blob], user_name + ".wav");
-        frmData.append('audio', audio_file);
+        var user_send = user_name.normalize('NFD')
+            .replace(/([^n\u0300-\u036f]|n(?!\u0303(?![\u0300-\u036f])))[\u0300-\u036f]+/gi, "$1").replace(' ', '_')
+            .normalize();
+        try {
+            audio_file = new File([blob], user_send + ".wav");
+            frmData.append('audio', audio_file);
+        } catch (error) {
+            frmData.append('audio', null);
+        }
+
         frmData.append('user', user_name);
         frmData.append('texto', data_text);
         frmData.append('csrfmiddlewaretoken', csrftoken);
@@ -260,10 +276,9 @@ const EnviarAjax = () => {
                     $("#load").remove();
                     alert_success(data['message']);
                     talk_robot("¡Perfecto!, pude clonar tu voz aún que fue un poco difícil.");
-                    $("#chat").append($('<div class="row"></div>').append($('<audio controls></audio>').attr('src', data['url'])));
-                    $('#chat').scrollTop($('#chat').prop('scrollHeight'));
-                    console.log(data['url']);
                     talk_robot("Aún estoy aprendiendo, así que mejorare en clonar cualquier voz al 100%");
+                    $("#chat").append($('<div class="audio-controler"></div>').append($('<audio controls></audio>').attr('src', data['url'])));
+                    $('#chat').scrollTop($('#chat').prop('scrollHeight'));
                 } else {
                     $("#load").remove();
                     alert_error(data['message']);

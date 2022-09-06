@@ -18,12 +18,13 @@ SECRET_KEY = "django-insecure-y5tgc9#wl9tv7$aa$bq)p027s44rjb%h+f%m&s2f6f!0pbt!n^
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    "sslserver",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -98,7 +99,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-ec"
 
-TIME_ZONE = "UTC-5"
+TIME_ZONE = "UTC"
 
 USE_I18N = True
 
