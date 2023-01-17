@@ -15,9 +15,9 @@ from entrenamiento.models import Media
 # Create your views here.
 def clonar(request):
     if request.method == "POST":
-        enc_model_fpath = Path("entrenamiento/encoder/saved_models/pretrained.pt")
-        syn_model_fpath = Path("entrenamiento/synthesizer/saved_models/cvcorpus/cvcorpus_200k.pt")
-        voc_model_fpath = Path("entrenamiento/vocoder/saved_models/pretrained/pretrained.pt")
+        enc_model_fpath = Path("entrenamiento/lang/es/encoder.pt")
+        syn_model_fpath = Path("entrenamiento/lang/es/synthesizer.pt")
+        voc_model_fpath = Path("entrenamiento/lang/es/vocoder.pt")
         # Cheequea si los modelos están descargados
         check_model = check_model_paths(
             encoder_path=enc_model_fpath,

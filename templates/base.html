@@ -1,28 +1,85 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="es-ec">
+<html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Veniot{% block tile %} {% endblock tile %}</title>
-    <!-- CSS -->
-    <link rel="stylesheet" href="{% static 'fontawesome/css/all.min.css' %}" type="text/css">
-    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'css/index.css' %}" type="text/css">
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <!-- Favicons -->
+    <link href="{% static 'svg/veniot.svg' %}" rel="icon">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Source+Sans+Pro:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600;1,700&display=swap"
+        rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <link href="{% static 'css/aos.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/glightbox.min.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/swiper-bundle.min.css' %}" rel="stylesheet" type="text/css" />
+
+    <!-- Variables CSS Files. Uncomment your preferred color scheme -->
+    <link href="{% static 'css/variables.css' %}" rel="stylesheet" type="text/css" />
+
+    <!-- Template Main CSS File -->
+    <link href="{% static 'css/main.css' %}" rel="stylesheet" type="text/css" />
+
+    <title>Veniot</title>
+
     {% block css %} {% endblock css %}
+
 
 </head>
 
 <body>
-    {% include 'header.html' %}
+
+    <!-- ======= Header ======= -->
+    <header id="header" class="header fixed-top" data-scrollto-offset="0">
+        <div class="container-fluid d-flex align-items-center justify-content-between">
+            <a href="index.html" class="logo d-flex align-items-center scrollto me-auto me-lg-0">
+                <h1>VENIOT<span>.</span></h1>
+            </a>
+
+            <nav id="navbar" class="navbar">
+                <ul>
+                    <li><a class="nav-link scrollto" href="/">Inicio</a></li>
+                    <li><a class="nav-link scrollto" href="/#cta">Sobre veniot</a></li>
+                    <li><a class="nav-link scrollto" href="/#team">Equipo</a></li>
+
+                </ul>
+                <i class="bi bi-list mobile-nav-toggle d-none"></i>
+            </nav><!-- .navbar -->
+
+            <a class="btn-getstarted scrollto" href="{% url 'chat' %}">Iniciar</a>
+
+        </div>
+    </header><!-- End Header -->
     {% block content %} {% endblock content %}
-    {% include 'footer.html' %}
-    <!-- JS -->
-    <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
-    <script src="{% static 'js/sweetalert.min.js' %}"></script>
+
+    <a href="#" class="scroll-top d-flex align-items-center justify-content-center"><i
+            class="bi bi-arrow-up-short"></i></a>
+
+    <div id="preloader"></div>
+
+    <!-- Vendor JS Files -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <script src="{% static 'js/aos.js' %}" type="text/javascript"></script>
+    <script src="{% static 'js/glightbox.min.js' %}" type="text/javascript"></script>
+    <script src="{% static 'js/isotope.pkgd.min.js' %}" type="text/javascript"></script>
+    <script src="{% static 'js/swiper-bundle.min.js' %}" type="text/javascript"></script>
+
+    <!-- Template Main JS File -->
+    <script src="{% static 'js/main.js' %}" type="text/javascript"></script>
     {% block js %} {% endblock js %}
+
 </body>
 
 </html>

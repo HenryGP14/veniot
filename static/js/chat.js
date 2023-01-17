@@ -32,19 +32,56 @@ function talk() {
             break;
         case 3:
             talk_user("Si");
-            talk_robot("Da click en el icono de grabar y lee el siguiente texto. Trabaja mientras otros duermen, Estudia mientras otros se divierten, Persiste mientras otros descansan y luego vivirás lo que otros solo sueñan.");
-            $("#btnEnviar").hide();
+            talk_robot("Deseas subir un audio, o grabarlo desde aquí");
+            $("#btnOpcion").show();
             $("#btnComenzarGrabacion").show();
-            $("#btnDetenerGrabacion").show();
-            $("#btnComenzarGrabacion").click(comenzarAGrabar);
-            $("#btnDetenerGrabacion").click(detenerGrabacion);
+            $("#btnEnviar").hide();
+
             $("#userBox").val("");
+            $("#btnComenzarGrabacion").click(function () {
+                talk_robot("Lee el siguiente texto. Trabaja mientras otros duermen, Estudia mientras otros se divierten, Persiste mientras otros descansan y luego vivirás lo que otros solo sueñan.");
+                $("#btnEnviar").hide();
+                $("#btnOpcion").hide();
+
+                $("#btnDetenerGrabacion").show();
+                comenzarAGrabar();
+                $("#btnDetenerGrabacion").click(detenerGrabacion);
+
+            });
+            $("#btnOpcion").click(function () {
+                var html = `
+                <div class="portal derecha">
+                 <div class="profile">
+                   <img src="/static/svg/veniot.svg">
+                 </div>
+                <div class="content-msj">
+                <div class="upload-container" >
+                   <input type="file"  id="file_upload" accept="audio/mp3"  />
+                <br>
+                </div>
+                <div class="direccion"></div>
+                </div>
+        </div>`;
+                $("#chat").append(html);
+                $('#chat').scrollTop($('#chat').prop('scrollHeight'));
+                $('html').scrollTop($('html').prop('scrollHeight'));
+                $("#btnEnviar span").html("Enviar a clonar");
+                $("#btnEnviar").show();
+                $("#btnComenzarGrabacion").hide();
+                $("#btnDetenerGrabacion").hide();
+                $("#btnOpcion").hide();
+                $("#btnEnviar").css('width', '200px ');
+            });
+            opciones += 1;
             break;
+
         case 4:
             $("#btnEnviar").show();
             $("#btnComenzarGrabacion").hide();
             $("#btnDetenerGrabacion").hide();
-            talk_robot(`¡Perfecto!, ahora escribe lo que te gustaría escuchar ${ mensaje }`);
+            $("#btnOpcion").hide();
+            $("#userBox").val("");
+            talk_robot(`¡Perfecto!, ahora escribe lo que te gustaría escuchar ${mensaje}`);
             $("#userBox").show();
             $("#btnEnviar span").html("Enviar a clonar");
             $("#btnEnviar").css('width', '200px ');
@@ -52,6 +89,14 @@ function talk() {
             opciones += 1;
             break;
         case 5:
+            $("#btnEnviar span").html("Enviar a clonar");
+            $("#btnEnviar").show();
+            $("#btnEnviar").css('width', '200px ');
+            $("#btnEnviar").click(EnviarAjax);
+            opciones += 1;
+            break;
+
+        case 6:
             data_text = $("#userBox").val();
             if ($("#userBox").val().length > 0) {
                 talk_user($("#userBox").val());
@@ -73,7 +118,7 @@ function talk_robot(mensaje) {
         </div>
         <div class="content-msj">
             <p class="msj">
-                ${ mensaje }
+                ${mensaje}
             </p>
             <div class="direccion"></div>
         </div>
@@ -92,7 +137,7 @@ function talk_user(mensaje) {
         </div>
         <div class="content-msj">
             <p class="msj">
-                ${ mensaje } 
+                ${mensaje} 
             </p>
             <div class="direccion"></div>
         </div>
@@ -161,7 +206,7 @@ var myRecorder = {
     },
     init: function () {
         if (null === myRecorder.objects.context) {
-            myRecorder.objects.context = new(
+            myRecorder.objects.context = new (
                 window.AudioContext || window.webkitAudioContext
             );
         }
@@ -177,8 +222,8 @@ var myRecorder = {
             comenzarAContar();
             myRecorder.objects.recorder = new Recorder(
                 myRecorder.objects.context.createMediaStreamSource(stream), {
-                    numChannels: 1
-                }
+                numChannels: 1
+            }
             );
             myRecorder.objects.recorder.record();
         }).catch(function (err) {
@@ -188,7 +233,8 @@ var myRecorder = {
                 mensaje = "con mi voz predeterminada";
                 opciones += 1;
                 talk();
-            });;
+            });
+            ;
         });
     },
     stop: function (listObject) {
@@ -326,4 +372,16 @@ function alert_error(text) {
         showMethod: "fadeIn",
         hideMethod: "fadeOut"
     });
+}
+function uploadFiles() {
+    var files = document.getElementById('file_upload').files;
+    if (files.length == 0) {
+        alert("Please first choose or drop any file(s)...");
+        return;
+    }
+    var filenames = "";
+    for (var i = 0; i < files.length; i++) {
+        filenames += files[i].name + "\n";
+    }
+    alert("Selected file(s) :\n____________________\n" + filenames);
 }

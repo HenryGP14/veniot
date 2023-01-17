@@ -2,13 +2,15 @@
 {% load static %}
 
 {% block css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+    integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link href="{% static 'css/chat.css' %}" rel="stylesheet" type="text/css" />
 <link href="{% static 'css/toastr.css' %}" rel="stylesheet" type="text/css" />
 {% endblock css %}
 
 {% block content %}
-
-<div class="container">
+<div class="container" style="padding: 80px 0px 60px">
     <div class="mensajeria">
         <div class="chat" id="chat">
             <div class="portal derecha">
@@ -26,11 +28,14 @@
         <p id="duracion"></p>
         <div data-role="recordings"></div>
         <div class="receptor justify-content-end">
-            {% csrf_token %}
             <input type="text" id="userBox" style="display: none; width: 100%;" placeholder="Escribe el mensaje">
             <button class="btn enviar" id="btnEnviar" onclick="talk()">
                 <i class="fa-solid fa-paper-plane" style="margin-right: 11px;"></i>
                 <span>Hola</span>
+            </button>
+            <button class="btn subir" id="btnOpcion" style="display: none;">
+                <i class="fa-solid fa-upload" style="margin-right: 10px;"></i>
+                <span>Subir audio</span>
             </button>
             <button class="btn grabar" id="btnComenzarGrabacion" style="display: none;">
                 <i class="fa-solid fa-microphone" style="margin-right: 10px;"></i>

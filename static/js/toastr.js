@@ -1,8 +1,9 @@
-/*
- * Note that this is toastr v2.1.3, the "latest" version in url has no more maintenance,
- * please go to https://cdnjs.com/libraries/toastr.js and pick a certain version you want to use,
- * make sure you copy the url from the website since the url may change between versions.
- * */
+/* 
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Other/javascript.js to edit this template
+ */
+
+
 !(function (e) {
     e(["jquery"], function (e) {
         return (function () {
