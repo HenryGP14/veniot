@@ -11,13 +11,27 @@ from entrenamiento.vocoder import inference as vocoder
 from pathlib import Path
 from django.http import JsonResponse
 from entrenamiento.models import Media
+from django.views.decorators.csrf import csrf_exempt
 
-# Create your views here.
+
+@csrf_exempt
 def clonar(request):
     if request.method == "POST":
-        enc_model_fpath = Path("entrenamiento/lang/es/encoder.pt")
-        syn_model_fpath = Path("entrenamiento/lang/es/synthesizer.pt")
-        voc_model_fpath = Path("entrenamiento/lang/es/vocoder.pt")
+        if request.POST["lang"] == "":
+            return JsonResponse(
+                {
+                    "code": 0,
+                    "message": "Lo sentimos no has seleccionado un idioma",
+                }
+            )
+        if request.POST["lang"] == "es":
+            enc_model_fpath = Path("entrenamiento/lang/es/encoder.pt")
+            syn_model_fpath = Path("entrenamiento/lang/es/synthesizer.pt")
+            voc_model_fpath = Path("entrenamiento/lang/es/vocoder.pt")
+        else:
+            enc_model_fpath = Path("entrenamiento/lang/en/encoder.pt")
+            syn_model_fpath = Path("entrenamiento/lang/en/synthesizer.pt")
+            voc_model_fpath = Path("entrenamiento/lang/en/vocoder.pt")
         # Cheequea si los modelos están descargados
         check_model = check_model_paths(
             encoder_path=enc_model_fpath,
@@ -139,6 +153,7 @@ def clonar(request):
                 }
             )
         except Exception as e:
+            print(e)
             # El error -45 aparece cuando algunos de los modelos no esta bien descargados y se encuentran vacios
             print(
                 "Lo sentimos el servidor de clonación de voz se encuentra fuera de servicio, contacte algunos de los desarrolladores e indique error -45"

@@ -7,6 +7,39 @@
     crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link href="{% static 'css/chat.css' %}" rel="stylesheet" type="text/css" />
 <link href="{% static 'css/toastr.css' %}" rel="stylesheet" type="text/css" />
+<style>
+    .upload-container {
+        position: relative;
+    }
+
+    .upload-container input {
+        border: 1px solid #92b0b3;
+        background: #f1f1f1;
+        outline: 2px dashed #92b0b3;
+        outline-offset: -10px;
+        padding: 100px 0px 100px 30px;
+        text-align: center !important;
+        width: 500px;
+    }
+
+    .upload-container input:hover {
+        background: #ddd;
+    }
+
+    .upload-container:before {
+        position: absolute;
+        bottom: 50px;
+        left: 150px;
+        content: " (or) Drag and Drop files here. ";
+        color: #3f8188;
+        font-weight: 900;
+    }
+
+    .upload-btn {
+        margin-left: 300px;
+        padding: 7px 20px;
+    }
+</style>
 {% endblock css %}
 
 {% block content %}
@@ -44,6 +77,15 @@
             <button class="btn enviar" id="btnDetenerGrabacion" style="display: none;" disabled>
                 <i class="fa-solid fa-paper-plane" style="margin-right: 10px;"></i>
                 <span>Detener</span>
+            </button>
+
+            <button class="btn grabar" id="btnES" style="display: none;">
+                <i class="fa-solid fa-microphone" style="margin-right: 10px;"></i>
+                <span>Español</span>
+            </button>
+            <button class="btn enviar" id="btnEN" style="display: none;">
+                <i class="fa-solid fa-paper-plane" style="margin-right: 10px;"></i>
+                <span>Inglés</span>
             </button>
         </div>
     </div>

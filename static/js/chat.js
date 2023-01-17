@@ -1,5 +1,6 @@
 var opciones = 0;
-var mensaje = "con tu propia voz"
+var mensaje = "con tu propia voz";
+var idioma = "";
 const $duracion = document.querySelector("#duracion");
 var user_name, data_text;
 
@@ -61,22 +62,51 @@ function talk() {
                 </div>
                 <div class="direccion"></div>
                 </div>
-        </div>`;
+                </div>`;
+                $("#btnComenzarGrabacion").hide();
+                $("#btnDetenerGrabacion").hide();
                 $("#chat").append(html);
                 $('#chat').scrollTop($('#chat').prop('scrollHeight'));
                 $('html').scrollTop($('html').prop('scrollHeight'));
-                $("#btnEnviar span").html("Enviar a clonar");
-                $("#btnEnviar").show();
-                $("#btnComenzarGrabacion").hide();
-                $("#btnDetenerGrabacion").hide();
+                $("#btnEN span").html("Quiero clonar la voz de este archivo");
+                $("#btnEN").show().click(function () {
+                    if ($('#file_upload').val() != null && $('#file_upload').val() != 0) {
+                        var archivo = $("#file_upload").val();
+                        var extensiones = archivo.substring(archivo.lastIndexOf("."));
+                        if (extensiones != ".mp3" && extensiones != ".wav" && extensiones != ".ogg") {
+                            talk_robot("Tienes que subir un archivo valido como mp3, ogg o wav");
+                        } else {
+                            opciones += 1;
+                            talk();
+                        }
+                    } else {
+                        talk_robot("Tienes que subir un archivo para poder clonar su voz");
+                    }
+                });
                 $("#btnOpcion").hide();
-                $("#btnEnviar").css('width', '200px ');
+            });
+            break;
+        case 4:
+            $('#file_upload').prop('disabled', true);
+            $("#btnComenzarGrabacion").hide();
+            $("#btnDetenerGrabacion").hide();
+            $("#btnEN span").html("Inglés");
+            $("#btnEnviar").hide();
+            $("#btnOpcion").hide();
+            talk_robot(`¡Perfecto!, ahora en que idioma te gustaría escuchar ${mensaje}`);
+            $("#btnES").show().off('click').click(function () {
+                idioma = "es";
+                talk();
+            });
+            $("#btnEN").show().off('click').click(function () {
+                idioma = "en";
+                talk();
             });
             opciones += 1;
             break;
-
-        case 4:
-            $("#btnEnviar").show();
+        case 5:
+            $("#btnES").hide();
+            $("#btnEN").hide();
             $("#btnComenzarGrabacion").hide();
             $("#btnDetenerGrabacion").hide();
             $("#btnOpcion").hide();
@@ -84,18 +114,11 @@ function talk() {
             talk_robot(`¡Perfecto!, ahora escribe lo que te gustaría escuchar ${mensaje}`);
             $("#userBox").show();
             $("#btnEnviar span").html("Enviar a clonar");
-            $("#btnEnviar").css('width', '200px ');
-            $("#btnEnviar").click(EnviarAjax);
-            opciones += 1;
-            break;
-        case 5:
-            $("#btnEnviar span").html("Enviar a clonar");
             $("#btnEnviar").show();
             $("#btnEnviar").css('width', '200px ');
             $("#btnEnviar").click(EnviarAjax);
             opciones += 1;
             break;
-
         case 6:
             data_text = $("#userBox").val();
             if ($("#userBox").val().length > 0) {
@@ -283,12 +306,13 @@ const comenzarAGrabar = () => {
 };
 const detenerGrabacion = () => {
     myRecorder.stop(listObject);
+    talk();
 };
 
 const EnviarAjax = () => {
     if (data_text.length > 0) {
         var spinner = `
-        <div id="load" class="spinner-border text-danger position-absolute" role="status" style="right: 10px; bottom:20px;">
+        <div id="load" class="spinner-border text-danger position-absolute" role="status" style="right: 10px; bottom:26px;">
             <span class="visually-hidden">Loading...</span>
         </div>
         `;
@@ -307,6 +331,7 @@ const EnviarAjax = () => {
 
         frmData.append('user', user_name);
         frmData.append('texto', data_text);
+        frmData.append('lang', idioma);
         frmData.append('csrfmiddlewaretoken', csrftoken);
         $.ajax({
             method: "POST",
