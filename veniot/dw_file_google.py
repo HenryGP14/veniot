@@ -1,12 +1,10 @@
-# https://drive.google.com/file/d/1SqKizB5AuPm5e_JUcZUrlEqjfzYjDhMu/view?usp=sharing # encoder/saved_models/pretrained.pt
-# https://drive.google.com/file/d/15caUh6KS2bENCp4GOYXH-LKC98rTW98B/view?usp=sharing # synthsizer/saved_models/cvcorpus/cvcorpus_200k.pt
-# https://drive.google.com/file/d/1nd_8uraS3vA3oCaD8u5PwdZjQCgTZizP/view?usp=sharing # synthsizer/saved_models/cvcorpus/cvcorpus_225k.pt
-# https://drive.google.com/file/d/1nO9R1Lch1N7YJTmVQWYu_x_WcMyKurht/view?usp=sharing # synthsizer/saved_models/pretrained/pretrained.pt
-# https://drive.google.com/file/d/1grP-F5SafzgunkNOuPldOcNJg074xbkT/view?usp=sharing # vocoder/saved_models/pretrained/pretrained.pt
+# https://drive.google.com/file/d/1XjDcYh9qf4js5h0TZPw8SSxwzFqvxctP/view?usp=share_link lang/en/encoder.pt
+# https://drive.google.com/file/d/1PL1Nvy2Tnf-xXEhdT-Rm9lbj1RmZSpRo/view?usp=share_link lang/en/synthesizer.pt
+# https://drive.google.com/file/d/1DL5bS-qsNq1dfemOmPnLusWu4XHNUhHf/view?usp=share_link lang/en/vocoder.pt
 
-# https://drive.google.com/drive/folders/1Arxft7xy1WnkCCLGJ5zV4XSsLuYYKNnN?usp=sharing # synthsizer/saved_models/cvcorpus
-# https://drive.google.com/drive/folders/1usXB391J0hHwuQYJkhPapMSwH-Wt-krn?usp=sharing # synthsizer/saved_models/pretrained
-# https://drive.google.com/drive/folders/1pj_l-j4yht9x9txz2arqajuPKHUucGsG?usp=sharing # vocoder/saved_models/pretrained
+# https://drive.google.com/file/d/1c-1ArKmgT-iu0AJTL_CvcI6IYITqo0f5/view?usp=share_link lang/es/encoder.pt
+# https://drive.google.com/file/d/1HpJU6Cs4ikQYi9bdSylwRm7i_Cu37tPi/view?usp=share_link lang/es/synthesizer.pt
+# https://drive.google.com/file/d/1Cke_maOHVixZNeGsW8qMDcDWSKV4BLKz/view?usp=share_link lang/es/vocoder.pt
 import os
 
 from pydrive2.auth import GoogleAuth
@@ -40,15 +38,13 @@ def bajar_archivo_por_id(id_drive, ruta_descarga):
     if not os.path.isfile(ruta_descarga + nombre_archivo):
         archivo.GetContentFile(ruta_descarga + nombre_archivo)
     else:
-        print("El archivo ya se encuentra descargado = %s_%s", ruta_descarga, nombre_archivo) 
+        print("El archivo ya se encuentra descargado = %s_%s", ruta_descarga, nombre_archivo)
 
 
 # DESCARGAR UN ARCHIVO DE DRIVE POR NOMBRE
 def bajar_acrchivo_por_nombre(nombre_archivo, ruta_descarga):
     credenciales = login()
-    lista_archivos = credenciales.ListFile(
-        {"q": "title = '" + nombre_archivo + "'"}
-    ).GetList()
+    lista_archivos = credenciales.ListFile({"q": "title = '" + nombre_archivo + "'"}).GetList()
     if not lista_archivos:
         print("No se encontro el archivo: " + nombre_archivo)
     archivo = credenciales.CreateFile({"id": lista_archivos[0]["id"]})
@@ -57,18 +53,20 @@ def bajar_acrchivo_por_nombre(nombre_archivo, ruta_descarga):
 
 def descargar_archivos():
     files = [
-        "1SqKizB5AuPm5e_JUcZUrlEqjfzYjDhMu",
-        "15caUh6KS2bENCp4GOYXH-LKC98rTW98B",
-        "1nd_8uraS3vA3oCaD8u5PwdZjQCgTZizP",
-        "1nO9R1Lch1N7YJTmVQWYu_x_WcMyKurht",
-        "1grP-F5SafzgunkNOuPldOcNJg074xbkT",
+        "1XjDcYh9qf4js5h0TZPw8SSxwzFqvxctP",
+        "1PL1Nvy2Tnf-xXEhdT-Rm9lbj1RmZSpRo",
+        "1DL5bS-qsNq1dfemOmPnLusWu4XHNUhHf",
+        "1c-1ArKmgT-iu0AJTL_CvcI6IYITqo0f5",
+        "1HpJU6Cs4ikQYi9bdSylwRm7i_Cu37tPi",
+        "1Cke_maOHVixZNeGsW8qMDcDWSKV4BLKz",
     ]
     rutas_descargas = [
-        "./entrenamiento/encoder/saved_models/",
-        "./entrenamiento/synthesizer/saved_models/cvcorpus/",
-        "./entrenamiento/synthesizer/saved_models/cvcorpus/",
-        "./entrenamiento/synthesizer/saved_models/pretrained/",
-        "./entrenamiento/vocoder/saved_models/pretrained/",
+        "./entrenamiento/lang/en/",
+        "./entrenamiento/lang/en/",
+        "./entrenamiento/lang/en/",
+        "./entrenamiento/lang/es/",
+        "./entrenamiento/lang/es/",
+        "./entrenamiento/lang/es/",
     ]
 
     for archivo, ruta in zip(files, rutas_descargas):

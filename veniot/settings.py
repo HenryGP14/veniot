@@ -3,7 +3,7 @@ import os
 from pathlib import Path
 from veniot import dw_file_google as dw
 
-# dw.descargar_archivos()
+dw.descargar_archivos()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
