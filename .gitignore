@@ -1,2 +1,5 @@
 lang
 media
+client_secrets.*
+credentials_module.*
+settings.yaml
