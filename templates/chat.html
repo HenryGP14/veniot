@@ -30,7 +30,7 @@
         position: absolute;
         bottom: 50px;
         left: 150px;
-        content: " (or) Drag and Drop files here. ";
+        content: " (o) Arrastre y suelte archivos aquí. ";
         color: #3f8188;
         font-weight: 900;
     }
@@ -58,7 +58,12 @@
                 </div>
             </div>
         </div>
-        <p id="duracion"></p>
+        <div id="timer" style="display: none;">
+            <div class="d-flex justify-content-center align-items-center">
+                <i class="fa-solid fa-clock" style="margin-right: 10px; color: brown;"></i>
+                <p id="duracion" class="p-0 m-0"></p>
+            </div>
+        </div>
         <div data-role="recordings"></div>
         <div class="receptor justify-content-end">
             <input type="text" id="userBox" style="display: none; width: 100%;" placeholder="Escribe el mensaje">
@@ -80,11 +85,11 @@
             </button>
 
             <button class="btn grabar" id="btnES" style="display: none;">
-                <i class="fa-solid fa-microphone" style="margin-right: 10px;"></i>
+                <i class="fa-solid fa-language" style="margin-right: 10px;"></i>
                 <span>Español</span>
             </button>
             <button class="btn enviar" id="btnEN" style="display: none;">
-                <i class="fa-solid fa-paper-plane" style="margin-right: 10px;"></i>
+                <i class="fa-solid fa-microphone" style="margin-right: 10px;"></i>
                 <span>Inglés</span>
             </button>
         </div>

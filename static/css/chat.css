@@ -40,7 +40,6 @@
 }
 
 .mensajeria .chat .portal .content-msj .msj {
-    border: #0ea2bd solid 2px;
     border-radius: 5px;
     padding: 5px 10px;
 }
@@ -50,6 +49,14 @@
     width: 0;
     height: 0;
     border-style: solid;
+}
+
+.mensajeria .chat .portal.derecha .content-msj .msj {
+    border: #0ea2bd solid 2px;
+}
+
+.mensajeria .chat .portal.izquierda .content-msj .msj {
+    border: #bd0e65 solid 2px;
 }
 
 .mensajeria .chat .portal.derecha .content-msj .direccion {
@@ -65,7 +72,7 @@
     right: -16px;
     transform: translate(0, -50%);
     border-width: 10px 0 10px 17.3px;
-    border-color: transparent transparent transparent #0ea2bd;
+    border-color: transparent transparent transparent #bd0e65;
 }
 
 .mensajeria .receptor {

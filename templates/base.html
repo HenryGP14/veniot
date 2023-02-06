@@ -40,24 +40,21 @@
 <body>
 
     <!-- ======= Header ======= -->
-    <header id="header" class="header fixed-top" data-scrollto-offset="0">
+    <header id="header" class="header fixed-top" data-scrollto-offset="0"
+        style="box-shadow: 0px 0px 100px -20px rgba(0,0,0,0.32);">
         <div class="container-fluid d-flex align-items-center justify-content-between">
-            <a href="index.html" class="logo d-flex align-items-center scrollto me-auto me-lg-0">
+            <a href="/" class="logo d-flex align-items-center scrollto me-auto me-lg-0">
                 <h1>VENIOT<span>.</span></h1>
             </a>
-
             <nav id="navbar" class="navbar">
                 <ul>
                     <li><a class="nav-link scrollto" href="/">Inicio</a></li>
                     <li><a class="nav-link scrollto" href="/#cta">Sobre veniot</a></li>
                     <li><a class="nav-link scrollto" href="/#team">Equipo</a></li>
-
                 </ul>
                 <i class="bi bi-list mobile-nav-toggle d-none"></i>
             </nav><!-- .navbar -->
-
-            <a class="btn-getstarted scrollto" href="{% url 'chat' %}">Iniciar</a>
-
+            <a class="btn-getstarted scrollto" href="{% url 'chat' %}">Probar</a>
         </div>
     </header><!-- End Header -->
     {% block content %} {% endblock content %}

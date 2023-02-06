@@ -88,6 +88,9 @@ function talk() {
             break;
         case 4:
             $('#file_upload').prop('disabled', true);
+            var audio_url = URL.createObjectURL($('#file_upload').prop('files')[0]);
+            $("#chat").append($('<div class="audio-controler mt-2"></div>').append($('<audio controls></audio>').attr('src', audio_url)));
+            $('#chat').scrollTop($('#chat').prop('scrollHeight'));
             $("#btnComenzarGrabacion").hide();
             $("#btnDetenerGrabacion").hide();
             $("#btnEN span").html("Inglés");
@@ -211,14 +214,14 @@ const refrescar = () => {
 const comenzarAContar = () => {
     tiempoInicio = Date.now();
     idIntervalo = setInterval(refrescar, 500);
-    console.log(idIntervalo);
+    $('#timer').show();
 };
 
 const detenerConteo = () => {
     clearInterval(idIntervalo);
     tiempoInicio = null;
     $duracion.textContent = "";
-
+    $('#timer').hide();
 };
 
 var myRecorder = {
@@ -252,7 +255,7 @@ var myRecorder = {
         }).catch(function (err) {
             swal("Información!!", "Lo sentimos no pudimos tener acceso a tu micrófono puedes concederlo manualmente si quieres interactuar con Veniot o puedes interactuar con mi voz predeterminada.", "warning").then((value) => {
                 talk_robot("Esta es mi voz predeterminada");
-                $("#chat").append($('<div class="audio-controler"></div>').append($('<audio controls></audio>').attr('src', '/media/sounds/audio_test2.wav')));
+                $("#chat").append($('<div class="audio-controler mt-2"></div>').append($('<audio controls></audio>').attr('src', '/media/sounds/audio_test2.wav')));
                 mensaje = "con mi voz predeterminada";
                 opciones += 1;
                 talk();
@@ -284,7 +287,7 @@ var myRecorder = {
                         .attr('href', url)
                         .attr('download', new Date().toUTCString() + '.wav');
                     // Wrap everything in a row
-                    var holderObject = $('<div class="audio-controler"></div>')
+                    var holderObject = $('<div class="audio-controler mt-2"></div>')
                         .append(audioObject)
                     // Append to the list
                     $("#chat").append(holderObject);
@@ -348,8 +351,9 @@ const EnviarAjax = () => {
                     alert_success(data['message']);
                     talk_robot("¡Perfecto!, pude clonar tu voz aún que fue un poco difícil.");
                     talk_robot("Aún estoy aprendiendo, así que mejorare en clonar cualquier voz al 100%");
-                    $("#chat").append($('<div class="audio-controler"></div>').append($('<audio controls></audio>').attr('src', data['url'])));
+                    $("#chat").append($('<div class="audio-controler mt-2"></div>').append($('<audio controls></audio>').attr('src', data['url'])));
                     $('#chat').scrollTop($('#chat').prop('scrollHeight'));
+                    talk_robot("Escribe otro texto, si quieres que vuelva a clonar tu voz!!");
                 } else {
                     $("#load").remove();
                     alert_error(data['message']);
