@@ -73,7 +73,7 @@ def clonar(request):
                 audio_media = Media()
                 audio_media.nombre = request.POST["user"]
                 audio_media.save()
-                audio_path = "./media/sounds/audio_test.mp3"
+                audio_path = "./media/predeterminado/audio_test.mp3"
                 text = request.POST["texto"]
                 nombre_usuario = "Ejemplo" + str(audio_media.id)
             # Obtener la ruta de audio

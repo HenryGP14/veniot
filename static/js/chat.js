@@ -326,8 +326,13 @@ const EnviarAjax = () => {
             .replace(/([^n\u0300-\u036f]|n(?!\u0303(?![\u0300-\u036f])))[\u0300-\u036f]+/gi, "$1").replace(' ', '_')
             .normalize();
         try {
-            audio_file = new File([blob], user_send + ".wav");
-            frmData.append('audio', audio_file);
+            if ($('#file_upload').val() != null && $('#file_upload').val() != 0) {
+                audio_file = $('#file_upload').prop('files')[0];
+                frmData.append('audio', audio_file);
+            } else {
+                audio_file = new File([blob], user_send + ".wav");
+                frmData.append('audio', audio_file);
+            }
         } catch (error) {
             frmData.append('audio', null);
         }
@@ -405,12 +410,12 @@ function alert_error(text) {
 function uploadFiles() {
     var files = document.getElementById('file_upload').files;
     if (files.length == 0) {
-        alert("Please first choose or drop any file(s)...");
+        alert("Primero elija o suelte cualquier archivo(s)...");
         return;
     }
     var filenames = "";
     for (var i = 0; i < files.length; i++) {
         filenames += files[i].name + "\n";
     }
-    alert("Selected file(s) :\n____________________\n" + filenames);
+    alert("Archivo seleccionado(s) :\n____________________\n" + filenames);
 }
