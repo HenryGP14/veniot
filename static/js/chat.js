@@ -87,9 +87,11 @@ function talk() {
             });
             break;
         case 4:
-            $('#file_upload').prop('disabled', true);
-            var audio_url = URL.createObjectURL($('#file_upload').prop('files')[0]);
-            $("#chat").append($('<div class="audio-controler mt-2"></div>').append($('<audio controls></audio>').attr('src', audio_url)));
+            if ($('#file_upload').val() != null && $('#file_upload').val() != 0) {
+                $('#file_upload').prop('disabled', true);
+                var audio_url = URL.createObjectURL($('#file_upload').prop('files')[0]);
+                $("#chat").append($('<div class="audio-controler mt-2"></div>').append($('<audio controls></audio>').attr('src', audio_url)));
+            }
             $('#chat').scrollTop($('#chat').prop('scrollHeight'));
             $("#btnComenzarGrabacion").hide();
             $("#btnDetenerGrabacion").hide();
